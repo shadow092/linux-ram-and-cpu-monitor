@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/test/">
-    <file alias="Main.qml">/home/jptrip/Desktop/start/cpp/qt/test/Main.qml</file>
-  </qresource>
-</RCC>
-
