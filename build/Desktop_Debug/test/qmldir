@@ -1,0 +1,6 @@
+module test
+typeinfo apptest.qmltypes
+prefer :/qt/qml/test/
+Main 254.0 Main.qml
+depends QtQuick
+

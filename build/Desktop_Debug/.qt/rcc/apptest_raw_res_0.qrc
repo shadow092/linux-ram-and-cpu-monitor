@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/test/">
+    <file alias=".gitignore">/home/jptrip/Desktop/start/cpp/qt/test/.gitignore</file>
+  </qresource>
+</RCC>
+

@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/test">
+    <file alias="qmldir">/home/jptrip/Desktop/start/cpp/qt/test/build/Desktop_Debug/test/qmldir</file>
+  </qresource>
+</RCC>
+
