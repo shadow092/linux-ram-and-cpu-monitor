@@ -87,6 +87,11 @@ Rectangle{
     left: parent.left
     }
 
+    MouseArea{
+        anchors.fill: parent
+    onPressed: { window.startSystemMove()}
+    }
+
     Button{
     id:closeBtn
     text: "X"

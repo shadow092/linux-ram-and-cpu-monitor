@@ -1,4 +1,5 @@
 # --- Qt build directories ---
+build/
 build-*/
 *.pro.user*
 .qmake.stash
