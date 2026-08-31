@@ -25,6 +25,9 @@ qt_add_qml_module(apptest
         SystemMonitor.h
         SystemMonitor.cpp
         RESOURCES .gitignore
+        QML_FILES OptionsWindow.qml
+        QML_FILES CustomeTopBar.qml
+        QML_FILES CustomeProgressBar.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

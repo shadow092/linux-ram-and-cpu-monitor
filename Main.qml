@@ -1,22 +1,30 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Basic
+import Qt.labs.settings
 
 import SystemDataComp 1.0
 
 ApplicationWindow {
     id: window
-    width: 640
-    height: 400
-    minimumWidth: 640
-    minimumHeight: 350
+    width: 700
+    height: 440
+    minimumWidth: 700
+    minimumHeight: 400
     visible: true
     title: qsTr("System Stats")
     flags: Qt.Window | Qt.FramelessWindowHint
     color: "transparent"
 
+
+
     SystemData{
         id: systemDataId
+    }
+
+    OptionsWindow{
+        id: optionWindow
+        transientParent: window
     }
 
 
@@ -68,212 +76,124 @@ ApplicationWindow {
 
 Rectangle{
     id:root
-    color: "#2e2e2e"
+    color: backgroundColor
     radius: 20
     border.width: 8
-    border.color: "#3d3d3d"
+    border.color: borderColor
     anchors{
     fill: parent
     margins: 2
     }
 
+    property color textColor: "#ffffff"
+    property color backgroundColor: "#2e2e2e"
+    property color borderColor: "#3d3d3d"
+    property string barStyle: "normal"
+
+
+    Settings{
+        id: appSettings
+        property alias backgroundColor: root.backgroundColor
+        property alias borderColor: root.borderColor
+        property alias barStyle: root.barStyle
+        property alias textColor: root.textColor
+
+    }
+
+CustomeTopBar{
+id:windowTopBar
+showMinimize: true
+targetWindow: window
+}
+
+CustomeProgressBar{}
+
+
     Rectangle{
-    radius: 10
-    height: 40
-    color: parent.border.color
-    anchors{
-    top:parent.top
-    right:parent.right
-    left: parent.left
-    }
-
-    MouseArea{
-        anchors.fill: parent
-    onPressed: { window.startSystemMove()}
-    }
-
-    Button{
-    id:closeBtn
-    text: "X"
-    width:40
-    height: 30
+    id:styleOptions
+    width: 80
     anchors{
     right: parent.right
+    bottom: parent.bottom
+    top:windowTopBar.bottom
     rightMargin: 5
-    verticalCenter: parent.verticalCenter
-    }
-
-    background:Rectangle {
+    bottomMargin: 6}
+    color: "#401c1c1c"
+    border.color: "#66ffffff"
+    border.width: 4
     radius: 10
-    Behavior on color { ColorAnimation { duration: 150 }    }
 
-    color : closeBtn.down ? "#555555" : (closeBtn.hovered ? "#ff2424" : "#333333")
-    }
-
-    contentItem: Text{
-        text: closeBtn.text
-        font.pixelSize: 20
-        Behavior on color { ColorAnimation { duration: 150 }    }
-        color: closeBtn.hovered ? "white" : "#ff2424"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.bold: true
-    }
-
-    onClicked: {
-        console.log("button")
-        window.close()}
-    }
-
-    Button{
-    id:minimizeBtn
-    text: "-"
-    width:40
-    height: 30
-    anchors{
-    right: closeBtn.left
-    rightMargin: 5
-    verticalCenter: parent.verticalCenter
-    }
-
-
-
-    background:Rectangle {
-
-    Behavior on color { ColorAnimation { duration: 150 }                }
-    radius: 10
-    color : minimizeBtn.down ? "#555555" : (minimizeBtn.hovered ? "#bdfdff" : "#333333")
-    }
-
-    contentItem: Text{
-        text: minimizeBtn.text
-        font.pixelSize: 35
-        Behavior on color { ColorAnimation { duration: 150 }    }
-        color: minimizeBtn.hovered ? "black" : "#bdfdff"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        font.bold: true
-    }
-
-    onClicked: {
-        window.showMinimized()}
-    }
-
-    }
-
-    property color textColor: "#ffffff"
+    Item {
+        anchors.fill: parent
 
     Column{
-        anchors.centerIn:parent
-        spacing: 5
+        anchors.centerIn: parent
+        spacing: 10
+        width: parent.width
 
-        RowLayout{
-            spacing: 10
-            Text {
-                text:"CPU Usage : "
-                color: root.textColor
-                font.pixelSize: 28
-                Layout.alignment: Qt.AlignVCenter
-            }
+    Button{
+    id:backgroundStyleBtn
+    width: parent.width/1.4
+    text: "BG"
+    anchors.horizontalCenter: parent.horizontalCenter
 
-            ProgressBar{
-            id:cpuProgressBar
-            value: systemDataId.cpuUsage.toFixed(1);
-            // value: 100
-            from:0
-            to:100
-            Layout.alignment: Qt.AlignVCenter
+    ToolTip.visible: hovered
+    ToolTip.text: "Background Style"
 
-            Behavior on value{
-            NumberAnimation{duration: 300; easing.type:Easing.OutQuad}
-            }
-
-            background: Rectangle{
-                implicitWidth: 200
-                implicitHeight: 20
-                color: "#2a2d32"
-                radius: 8
-                border.color: "#3a3f47"
-                border.width: 1
-            }
-            contentItem: Item{
-                implicitWidth: 200
-                implicitHeight: 16
-
-                Rectangle{
-                width: cpuProgressBar.visualPosition * parent.width
-                height: parent.height
-                radius: 8
-                color: cpuProgressBar.value > 80 ? "#e61518" : "#00d2ff"
-
-                }
-            }
-
-            }
-            Text {
-                text:systemDataId.cpuUsage.toFixed(2) + " %"
-                color: root.textColor
-                font.pixelSize: 28
-                Layout.alignment: Qt.AlignVCenter
-            }
+    background: Rectangle {
+            color: "#401c1c1c"
+            border.color: "#66ffffff"
+            border.width: 2
+            radius: 5
         }
 
-        RowLayout{
-            spacing: 10
-            Text {
-                text:"RAM Usage : "
-                color: root.textColor
-                font.pixelSize: 28
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            ProgressBar{
-            id:ramProgressBar
-            value: systemDataId.ramUsage.toFixed(1);
-            // value: 100
-            from:0
-            to:100
-            Layout.alignment: Qt.AlignVCenter
-
-            Behavior on value{
-            NumberAnimation{duration: 300; easing.type:Easing.OutQuad}
-            }
-
-            background: Rectangle{
-                implicitWidth: 200
-                implicitHeight: 20
-                color: "#2a2d32"
-                radius: 8
-                border.color: "#3a3f47"
-                border.width: 1
-            }
-            contentItem: Item{
-                implicitWidth: 200
-                implicitHeight: 16
-
-                Rectangle{
-                width: ramProgressBar.visualPosition * parent.width
-                height: parent.height
-                radius: 8
-                color: ramProgressBar.value > 80 ? "#e61518" : "#00d2ff"
-
-                }
-            }
-
-            }
-            Text {
-                text:systemDataId.ramUsage.toFixed(2) + " %"
-                color: root.textColor
-                font.pixelSize: 28
-                Layout.alignment: Qt.AlignVCenter
-            }
+    onClicked: {
+            optionWindow.currentOption = "background"
+            optionWindow.x = window.x + window.width + 5
+            optionWindow.y = window.y
+            optionWindow.show()
+            optionWindow.raise()
         }
-
-
 
     }
 
+    Button {
+        id: progressStyleBtn
+        text: "Bar"
+        width: parent.width/1.4
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        background: Rectangle {
+            color: "#401c1c1c"
+            border.color: "#66ffffff"
+            border.width: 2
+            radius: 5
+        }
+
+        ToolTip.visible: hovered
+        ToolTip.text: "Progress Bar Style"
+
+        onClicked: {
+                optionWindow.currentOption = "progressBar"
+                optionWindow.setX(window.x + window.width + 5)
+                optionWindow.setY(window.y)
+                optionWindow.show()
+                optionWindow.raise()
+            }
+    }
+
+    }
+}
+    }
+
+
+
 }
 
 
 }
+
+
+
+
+
